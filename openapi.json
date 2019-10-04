@@ -1,0 +1,346 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "LDAP",
+    "description" : "This is LDAP API\n",
+    "contact" : {
+      "email" : "SSandhu@exchange.slb.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "externalDocs" : {
+    "description" : "Developer Portal",
+    "url" : "https:\\\\devportal.slb.com\\ldap"
+  },
+  "servers" : [ {
+    "url" : "https://apigateway.evq.it.slb.com/ldap/1.0.0",
+    "description" : "LDAP API"
+  } ],
+  "paths" : {
+    "/employee" : {
+      "get" : {
+        "tags" : [ "employee" ],
+        "summary" : "search employee",
+        "description" : "Provides ability to search an employee by First name, Last name, manager, manager GIN, alias, email",
+        "operationId" : "searchEmployee",
+        "parameters" : [ {
+          "name" : "firstname",
+          "in" : "query",
+          "description" : "employee's first name",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "lastname",
+          "in" : "query",
+          "description" : "employee's last name",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "manager",
+          "in" : "query",
+          "description" : "employee's manager",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "managergin",
+          "in" : "query",
+          "description" : "employee's manager gin",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "alias",
+          "in" : "query",
+          "description" : "employee's LDAP alias",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "email",
+          "in" : "query",
+          "description" : "employee's LDAP email",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Range",
+          "in" : "header",
+          "description" : "pagination. Range Example (10-15)",
+          "required" : false,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Employee"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Employee"
+                  }
+                }
+              }
+            }
+          },
+          "206" : {
+            "description" : "partial content",
+            "headers" : {
+              "Content-Range" : {
+                "description" : "pagination. Shows range of returned records. Example (10-15/200)",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Employee"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Employee"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No data to match your search parameters"
+          }
+        },
+        "security" : [ {
+          "oAuth" : [ "read:employee" ]
+        }, {
+          "apikey" : [ ]
+        } ]
+      }
+    },
+    "/employee/{gin}" : {
+      "get" : {
+        "tags" : [ "employee" ],
+        "summary" : "Get Employee by GIN",
+        "description" : "Provides ability to search an employee by GIN (employee number)",
+        "operationId" : "getEmployeebyGin",
+        "parameters" : [ {
+          "name" : "gin",
+          "in" : "path",
+          "description" : "employee's GIN employee number",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Employee"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Employee"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Employee not found"
+          }
+        },
+        "security" : [ {
+          "oAuth" : [ "read:employee" ]
+        }, {
+          "apikey" : [ ]
+        } ]
+      }
+    },
+    "/group/{groupAlias}/employee/{employeeAlias}" : {
+      "put" : {
+        "tags" : [ "group" ],
+        "summary" : "Add a user to LDAP group",
+        "description" : "Provides ability to update LDAP Group by adding employee",
+        "operationId" : "addEmployeeToGroup",
+        "parameters" : [ {
+          "name" : "employeeAlias",
+          "in" : "path",
+          "description" : "LDAP alias of user",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "groupAlias",
+          "in" : "path",
+          "description" : "LDAP alias of group",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Bad request"
+          }
+        },
+        "security" : [ {
+          "oAuth" : [ "write:groups" ]
+        }, {
+          "apikey" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "group" ],
+        "summary" : "Remove employee from LDAP group",
+        "description" : "Provides ability to update LDAP Group by removing employee",
+        "operationId" : "removeEmployeeFromGroup",
+        "parameters" : [ {
+          "name" : "employeeAlias",
+          "in" : "path",
+          "description" : "LDAP alias of user",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "groupAlias",
+          "in" : "path",
+          "description" : "LDAP alias of group",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Bad request"
+          }
+        },
+        "security" : [ {
+          "oAuth" : [ "write:groups" ]
+        }, {
+          "apikey" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Employee" : {
+        "type" : "object",
+        "properties" : {
+          "employeenumber" : {
+            "type" : "string"
+          },
+          "firstname" : {
+            "type" : "string"
+          },
+          "lastname" : {
+            "type" : "string"
+          },
+          "gin" : {
+            "type" : "string"
+          },
+          "manager" : {
+            "type" : "string"
+          },
+          "managergin" : {
+            "type" : "string"
+          },
+          "aslias" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        },
+        "xml" : {
+          "name" : "Employee"
+        }
+      }
+    },
+    "securitySchemes" : {
+      "oAuth" : {
+        "type" : "oauth2",
+        "flows" : {
+          "implicit" : {
+            "scopes" : {
+              "write:groups" : "modify LDAP groups",
+              "read:employees" : "search employees"
+            }
+          }
+        }
+      },
+      "api_key" : {
+        "type" : "apiKey",
+        "name" : "apikey",
+        "in" : "header"
+      }
+    }
+  }
+}
