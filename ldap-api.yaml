@@ -1,0 +1,227 @@
+---
+swagger: "2.0"
+info:
+  description: |
+    This is LDAP API
+  version: 1.0.0
+  title: LDAP
+  termsOfService: ""
+  contact:
+    email: SSandhu@exchange.slb.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /employee:
+    get:
+      tags:
+      - employee
+      summary: search employee
+      description: Provides ability to search an employee by First name, Last name, manager, manager GIN, alias, email
+      operationId: searchEmployee
+      parameters:
+      - name: firstName
+        in: query
+        description: employee's first name
+        required: false
+        type: string
+      - name: lastName
+        in: query
+        description: employee's last name
+        required: false
+        type: string
+      - name: manager
+        in: query
+        description: employee's manager
+        required: false
+        type: string
+      - name: alias
+        in: query
+        description: employee's LDAP alias
+        required: false
+        type: string
+      - name: email
+        in: query
+        description: employee's LDAP email
+        required: false
+        type: string
+      - name: range
+        in: query
+        description: pagination. Range Example (10-15)
+        required: false
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              employees:
+                type: array
+                items:
+                  $ref: '#/definitions/Employee'
+        206:
+          description: partial content
+          schema:
+            type: object
+            properties:
+              employees:
+                type: array
+                items:
+                  $ref: '#/definitions/Employee'
+              nextPage:
+                type: string
+        404:
+          description: No data to match your search parameter
+      security:
+      - APIKeyHeader: []
+  /employee/{gin}:
+    get:
+      tags:
+      - employee
+      summary: Get Employee by GIN
+      description: Provides ability to search an employee by GIN (employee number)
+      operationId: getEmployeebyGin
+      parameters:
+      - name: gin
+        in: path
+        description: employee's GIN employee number
+        required: true
+        type: string
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/'
+        404:
+          description: Employee not found
+      security:
+      - APIKeyHeader: []
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    name: x-apikey
+    in: header
+definitions:
+  Employee:
+    type: object
+    properties:
+      id:
+        type: string
+      activedirectorydn:
+        type: string
+      alias:
+        type: string
+      c:
+        type: string
+      cn:
+        type: string
+      countryhris:
+        type: string
+      displayname:
+        type: string
+      dn:
+        type: string
+      employeeid:
+        type: string
+      employeemaster:
+        type: string
+      employeenumber:
+        type: string
+      employeetype:
+        type: string
+      expertise:
+        type: string
+      fp24qualifierhris:
+        type: string
+      givenname:
+        type: string
+      homemail:
+        type: string
+      jobcategory:
+        type: string
+      jobcode:
+        type: string
+      jobgroup:
+        type: string
+      jobtitle:
+        type: string
+      jpegphoto_status:
+        type: string
+      l:
+        type: string
+      labeleduri:
+        type: string
+      languages:
+        type: string
+      locationorgunit:
+        type: string
+      mail:
+        type: string
+      mailalternateaddress:
+        type: string
+      manager:
+        type: string
+      managerfunctional:
+        type: string
+      mobile:
+        type: string
+      modifytimestamp:
+        type: string
+      o:
+        type: string
+      ou:
+        type: string
+      personalmobile:
+        type: string
+      postalcode:
+        type: string
+      securitystatus:
+        type: string
+      sn:
+        type: string
+      st:
+        type: string
+      subscriptions:
+        type: string
+      technicalcareerlevel:
+        type: string
+      telephonenumber:
+        type: string
+      uid:
+        type: string
+      applicationmifareno:
+        type: string
+      businesscategory:
+        type: string
+      givennamelegal:
+        type: string
+      jpegphoto:
+        type: string
+      legalentitybillable:
+        type: string
+      postaladdress:
+        type: string
+      slbitbuilding:
+        type: string
+      street:
+        type: string
+    xml:
+      name: Employee
+  inline_response_200:
+    properties:
+      employees:
+        type: array
+        items:
+          $ref: '#/definitions/Employee'
+  inline_response_206:
+    properties:
+      employees:
+        type: array
+        items:
+          $ref: '#/definitions/Employee'
+      nextPage:
+        type: string
+externalDocs:
+  description: Developer Portal
+  url: https:\\devportal.slb.com\ldap
