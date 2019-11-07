@@ -1,0 +1,86 @@
+swagger: "2.0"
+info:
+  description: "Tool to validate OAS file according API governance rules"
+  version: "1.0.0"
+  title: "Schlumberger OAS Lint"
+  contact:
+    name: API Team
+    email: apigateway-support@slb.com
+  license:
+    name: Schlumberger proprietary
+host: "apigateway.evq.it.slb.com"
+basePath: "/open-api-spec"
+tags:
+  - name: oas-lint
+    description: tools for linting your Open Api Spec
+schemes:
+  - "https"
+security:
+  - APIKeyHeader: []
+externalDocs:
+  description: "Open API Spec 2.0 best practices"
+  url: "https://wiki.slb.com/display/ea/Open+API+Spec+2.0+best+practices"
+paths:
+  /url/validation:
+    get:
+      tags:
+        - oas-lint
+      summary: API to validate OAS yaml file using url to file location
+      operationId: validationFromUrl
+      produces:
+        - 'application/json'
+      parameters:
+        - $ref: '#/parameters/url'
+      responses:
+        '200':
+          description: Ok
+        '401':
+          description: Unauthorized
+        '405':
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/OasValidationResponse'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+parameters:
+  url:
+    name: "url"
+    in: "query"
+    description: "URL to yaml file with Open Api Spec"
+    required: true
+    type: "string"
+definitions:
+  OasValidationResponse:
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Error'
+    title: OasValidationResponse
+  Error:
+    type: object
+    properties:
+      errorCode:
+        type: integer
+        format: int32
+      errorMsg:
+        type: string
+    title: Error
+  ErrorResponse:
+    type: object
+    properties:
+      errorCode:
+        type: integer
+      errorMessage:
+        type: string
+      requestedURI:
+        type: string
+securityDefinitions:
+  APIKeyHeader:
+    type: "apiKey"
+    name: "x-apikey"
+    in: "header"
