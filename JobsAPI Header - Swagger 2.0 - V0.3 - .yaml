@@ -1,0 +1,370 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: JobHeaderInfo
+  description: The API allows users to query the Job header attributes available for a specific JobID or based on parameters:- Job Active From-To, Job Status, Prodictline, DistrictID. The data classification is private.
+  contact:
+    name: API Team
+    email: apigateway-support@slb.com
+  license:
+    name: Schlumberger proprietary
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+paths:
+  /Jobs/Header:
+    get:
+      summary: Return a list of Jobs along with the respective header attributes.
+      operationId: listJobs
+      description: Get a list of jobs with respective header attribute.
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: jobActiveFrom
+          in: query
+          description: Job active from date (Inclusive)
+          required: true
+          type: string
+        - name: jobActiveTo
+          in: query
+          description: Job active to date (Inclusive)
+          required: true
+          type: string
+        - name: JobStatus
+          in: query
+          description: Status of the jobs being retrieved.
+          required: true
+          type: string
+          enum: [Opportunity, Sold, Confirmed, Cancelled, CancelledNonSLB, Completed, Planned, InProgress, StandBy, OperationallyComplete, Forecast P90]
+        - name: jobID
+          in: query
+          description: Unique identifier of a Job. 
+          required: false
+          type: string
+        - name: ProductLine
+          in: query
+          description: Productline of jobs being retrieved. 
+          required: false
+          type: string
+        - name: DistrictID
+          in: query
+          description: District ID of jobs being retrieved. 
+          required: false
+          type: string
+      responses:
+        200:
+          description: "200 response - OK"
+          schema: 
+            $ref: '#/definitions/JobHeaderList'
+        400:
+          description: "The mandatory parameter is missing."
+        401:
+          description: "The endpoint cannot be reached because the request is not authorized."
+        403:
+          description: "The request's authorizations don't match the required ones needed to access the resource. Permissions denied."
+        404:
+          description: "Incorrect uri specified to consume service."
+
+definitions:
+  JobHeaderList:
+    required:
+        - JobHeader
+    properties:
+      JobHeader:
+        type: array
+        items:
+          $ref: '#/definitions/JobHeader'
+  JobHeader:
+    type: object
+    required:
+      - jobid
+      - jobname
+      - jobstartdate
+      - jobenddate
+      - jobgroup
+      - jobtype
+      - extjobtypeid
+      - jobstatus
+      - createddate
+      - createdby
+      - lastmodifieddate
+      - lastmodifiedby
+      - districtid
+      - districtname
+      - districttimezone
+      - districttimezonedisplayname
+      - districttimezonestandardname
+      - customerid
+      - customersapittid
+      - customername
+      - customercountry
+      - customeragreementname
+      - geomarketname
+      - subgeomarketname
+      - productline
+      - operationid
+      - opstartdate
+      - openddate
+      - operationstatus
+      - remoteopsrequired
+      - remoteopslocation
+      - wellid
+      - wellmasternumber
+      - wellname
+      - wellfield
+      - wellenvironment
+      - welltype
+      - wellsapittid
+      - wellapiuwi
+      - rignumber
+      - extrigid
+      - rigname
+      - rigtype
+      - rigenvironment
+      - probablity
+      - projectid
+      - standardjobtypegroupdesc
+      - standardjobtypegroupid
+      - ipmprojectnumber
+      - saphrsegmentcode
+      - sapprojectnumber
+      - riskprofilevalue
+      - serviceinstructions
+      - unitsystem
+      - pppid
+      - guid
+    properties:
+      jobid:
+        type: string
+        description: "Job ID, a unique Job identifier specific to the source systems (iDIstrict, FDP, JMP)"
+        example: 2796906, OA.100000.01.01, 30860
+      jobname:
+        type: string
+        description: "Job name"
+        example: azid_8.5in Logging
+      jobstartdate:
+        type: string
+        description: "Job start date (UTC) (Inclusive)"
+        example: 2019-09-01T00:00:17.59
+      jobenddate:
+        type: string
+        description: "Job end date (UTC) (Inclusive)"
+        example: 2019-09-01T00:00:17.59
+      jobgroup:
+        type: string
+        description: "Name of job group"
+        example: WLES
+      jobtype:
+        type: string
+        description: "Job Type"
+        example: ES-OH-NO
+      extjobtypeid:
+        type: integer
+        description: "Comcat job type Id"
+        example: 1037
+      jobstatus:
+        type: string
+        description: "Booking Status of a job"
+        example: Operationally Complete
+      createddate:
+        type: string
+        description: "Job created date (UTC)"
+        example: 2019-07-09T23:00:00Z
+      createdby:
+        type: string
+        description: "LDAP user who created the job"
+        example: JohnP
+      lastmodifieddate:
+        type: string
+        description: "Job modified date (UTC)"
+        example: 2019-07-09T23:00:00Z
+      lastmodifiedby:
+        type: string
+        description: "LDAP user who modified the job"
+        example: JohnP
+      districtid:
+        type: string
+        description: "Unique ID provided to a district (iDistrict specific)"
+        example: WL-BRGN
+      districtname:
+        type: string
+        description: "Name of the district"
+        example: WL BERGEN
+      districttimezone:
+        type: string
+        description: "District timezone Id"
+        example: (GMT+05:00) Ashgabat, Tashkent, Islamabad, Karachi
+      districttimezonedisplayname:
+        type: string
+        description: "District timezone display name"
+        example: West Asia Standard Time
+      districttimezonestandardname:
+        type: string
+        description: "District timezone name"
+        example: West Asia Standard Time
+      customerid:
+        type: string
+        description: "Customer Id"
+        example: 1-19VYR5, 1+28B+6
+      customersapittid:
+        type: integer
+        description: "SAPITTID of Customer"
+        example: 30012156
+      customername:
+        type: string
+        description: "Name of customer"
+        example: TURKMENGAS STATE CONCERN
+      customercountry:
+        type: string
+        description: "Country of customer"
+        example: NORWAY
+      customeragreementname:
+        type: string
+        description: "Siebel ID for Customer Agreement"
+        example: 1-2378619137
+      geomarketname:
+        type: string
+        description: "name of geomarket"
+        example: RCA
+      subgeomarketname:
+        type: string
+        description: "Name of sub-geomarket"
+        example: TKG
+      productline:
+        type: string
+        description: "Product line"
+        example: WL
+      operationid:
+        type: string
+        description: "Operation Id"
+        example: O.6000153.01
+      opstartdate:
+        type: string
+        description: "Rig/Operation up/start date (UTC)"
+        example: 2019-09-01T00:00:17.59
+      openddate:
+        type: string
+        description: "Rig/Operation down/end date (UTC)"
+        example: 2019-09-01T00:00:17.59
+      operationstatus:
+        type: string
+        description: "Operation status"
+        example: Complete
+      remoteopsrequired:
+        type: boolean 
+        description: "Remote operation required"
+        example: true
+      remoteopslocation:
+        type: string
+        description: "Remote operation location"
+        example: ROC
+      wellid: 
+        type: string
+        description: "Well ID"
+        example: 1-1KS1SO9
+      wellmasternumber:
+        type: string
+        description: "Well master number"
+        example: 630156369
+      wellname:
+        type: string
+        description: "Name of well"
+        example: OCS-P0240 HENRY 7B
+      wellfield:
+        type: string
+        description: "Well field"
+        example: Ninian
+      wellenvironment:
+        type: string
+        description: "Well environment"
+        example: Offshore - Shallow
+      welltype:
+        type: string
+        description: "Type of well"
+        example: Development
+      wellsapittid:
+        type: string
+        description: "SAP ITT ID of Well"
+        example: 65899148
+      wellapiuwi:
+        type: string
+        description: "API-UWI  of Well"
+        example: 50-029-21031-01-00
+      rignumber:
+        type: string
+        description: "Rig number"
+        example: 63006656
+      extrigid:
+        type: string
+        description: "CRM rig ID"
+        example: 1-1B1M43V
+      rigname:
+        type: string
+        description: "Name of the Rig"
+        example: Patterson
+      rigtype:
+        type: string
+        description: "Type of Rig"
+        example: Land Rig
+      rigenvironment:
+        type: string
+        description: "Rig operating environment"
+        example: Land
+      probablity:
+        type: string
+        description: "Probability of job execution"
+        example: 100
+      projectid:
+        type: string
+        description: "Project Id"
+        example: P.6000153
+      standardjobtypegroupdesc:
+        type: string
+        description: "ComCat Job Group Name"
+        example: PS-SLK-Ops
+      standardjobtypegroupid:
+        type: string
+        description: "ComCat Job Group ID"
+        example: 8528
+      padname:
+        type: string
+        description: "Pad name"
+        example: Masters Unit 2AH 3AH 6SH 7SH
+      padwellmaster:
+        type: string
+        description: "Pad master number"
+        example: 0065893632
+      ipmprojectnumber:
+        type: string
+        description: "IPM Project Number "
+        example: R.00000102.01.01.01
+      saphrsegmentcode:
+        type: string
+        description: "SAP HR segment code"
+        example: ALS
+      sapprojectnumber:
+        type: string
+        description: "SAP Project Number of job"
+        example: J.19.031187
+      riskprofilevalue:
+        type: integer
+        description: "Risk profile value"
+        example: 0
+      serviceinstructions:
+        type: string
+        description: "Service summary of job (specific to WireLine)"
+        example: SLK mechanical services
+      unitsystem:
+        type: string
+        description: "System of unit"
+        example: Metric
+      pppid:
+        type: string
+        description: "PPP ID"
+        example: 118832
+      guid:
+        type: string
+        description: "Global Unique Identifier"
+        example: 709231D1-5901-4E6E-81F5-70425D946B16
