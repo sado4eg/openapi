@@ -21,7 +21,7 @@ security:
   - APIKeyHeader: []
 externalDocs:
   description: "Find out more on the SLB WIKI"
-  url: ""
+  url: "https://wiki.slb.com/"
 paths:
   /exchangerate:
     get:
