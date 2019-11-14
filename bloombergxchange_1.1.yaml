@@ -19,6 +19,9 @@ schemes:
   - "https"
 security:
   - APIKeyHeader: []
+externalDocs:
+  description: "Find out more on the SLB WIKI"
+  url: ""
 paths:
   /exchangerate:
     get:
