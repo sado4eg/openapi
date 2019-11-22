@@ -1,0 +1,862 @@
+---
+swagger: "2.0"
+info:
+  description: This API provides Competency Transactional Services
+  version: "1.0"
+  title: Competency API
+  contact:
+    name: Jeff Woodel
+    email: JWoodel@slb.com
+  license:
+    name: Schlumberger proprietary
+host: apigateway.evq.it.slb.com
+basePath: /risk-to-integrity/competency-competencydata
+tags: []
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+security:
+- APIKeyHeader: []
+paths:
+  /pcp/{gin}:
+    get:
+      summary: The current Personal Competency Profile
+      description: The current Personal Competency Profile
+      operationId: pcp
+      produces:
+      - application/json
+      parameters:
+      - name: gin
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Personal Competency Profile
+          headers: {}
+          schema:
+            $ref: '#/definitions/PcpResponse'
+      deprecated: false
+  /competency-job:
+    post:
+      summary: Persist Job for use in Competency Transactions
+      description: Persist Job for use in Competency Transactions
+      operationId: competency-job
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: ""
+        required: true
+        schema:
+          $ref: '#/definitions/CompetencyJobPayload'
+      responses:
+        200:
+          description: Competency Internal Job ID
+          headers: {}
+          schema:
+            $ref: '#/definitions/JobId'
+      deprecated: false
+  /competency-job-id:
+    get:
+      summary: Returns the internal Competency indentifier for a Job
+      description: Competency unique identifier for a Job
+      operationId: competency-job-id
+      produces:
+      - application/json
+      parameters:
+      - name: externalJobId
+        in: query
+        required: true
+        type: string
+      - name: sourceSystemId
+        in: query
+        required: true
+        type: integer
+      - name: productLineId
+        in: query
+        required: true
+        type: integer
+      - name: isCompetencySegmentId
+        in: query
+        description: ""
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: Auto generated using Swagger Inspector
+          headers: {}
+          schema:
+            $ref: '#/definitions/JobId'
+      deprecated: false
+  /risk-calculation/{jobId}:
+    get:
+      summary: Calculated risk level and score for Competency Job Id
+      description: Calculated risk level and score for Competency Job Id
+      operationId: risk-calculation
+      produces:
+      - application/json
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Auto generated using Swagger Inspector
+          headers: {}
+          schema:
+            $ref: '#/definitions/RiskCalculatorResponse'
+      deprecated: false
+  /jcr/{jobId}:
+    get:
+      summary: Return calculated Job Compliance Requirements
+      description: Return calculated Job Compliance Requirements
+      operationId: jcr
+      produces:
+      - application/json
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Job Compliance Requirements
+          headers: {}
+          schema:
+            $ref: '#/definitions/JCR'
+      deprecated: false
+  /job-assignment-validation:
+    post:
+      summary: Job Competency compliance
+      description: Job Competency compliance
+      operationId: job-assignment-validation
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: ""
+        required: true
+        schema:
+          $ref: '#/definitions/JobAssignmentValidationRequest'
+      responses:
+        200:
+          description: Competency Job Validation Results
+          headers: {}
+          schema:
+            $ref: '#/definitions/JobAssignmentValidationResponse'
+      deprecated: false
+  /assessment-eligibility:
+    post:
+      summary: Check if a Gin is eligibile to take an assessment for a Competency Element and Proficiency Level
+      description: Check if a Gin is eligibile to take an assessment for a Competency Element and Proficiency Level
+      operationId: assessment-eligibility
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: ""
+        required: true
+        schema:
+          $ref: '#/definitions/AssessmentEligibilityRequest'
+      responses:
+        200:
+          description: Eligibility Report
+          headers: {}
+          schema:
+            $ref: '#/definitions/AssessmentEligibilityResponse'
+      deprecated: false
+  /jcr:
+    get:
+      summary: Return calculated Job Compliance Requirements
+      description: Return calculated Job Compliance Requirements
+      operationId: jcrExternal
+      produces:
+      - application/json
+      parameters:
+      - name: externalJobId
+        in: query
+        required: true
+        type: string
+      - name: sourceSystemId
+        in: query
+        required: true
+        type: integer
+      - name: productLineId
+        in: query
+        required: true
+        type: integer
+      - name: isCompetencySegmentId
+        in: query
+        description: ""
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: Job Compliance Requirements
+          headers: {}
+          schema:
+            $ref: '#/definitions/JCR'
+      deprecated: false
+  /candidate-ranking-report:
+    post:
+      summary: Competency Candidate ranking report for a Job
+      description: Competency Candidate ranking report for a Job
+      operationId: candidate-ranking-report
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: ""
+        required: true
+        schema:
+          $ref: '#/definitions/CandidateRankingReportRequest'
+      responses:
+        200:
+          description: Competency Candidate ranking report
+          headers: {}
+          schema:
+            $ref: '#/definitions/CandidateRankingReportResponse'
+      deprecated: false
+  /proficiency-expiration-report/{gin}:
+    get:
+      summary: Proficiency Expiration Report
+      description: Proficiency Expiration Report
+      operationId: proficiency-expiration-report
+      produces:
+      - application/json
+      parameters:
+      - name: gin
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Proficiency Expiration Report
+          headers: {}
+          schema:
+            $ref: '#/definitions/CandidateProficiencyReportResponse'
+      deprecated: false
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    name: x-apikey
+    in: header
+definitions:
+  JobId:
+    type: integer
+    title: JobId
+  RiskCalculatorResponse:
+    type: object
+    properties:
+      RiskScore:
+        type: number
+        format: double
+      RiskLevel:
+        type: integer
+        format: int32
+      JobId:
+        type: number
+        format: double
+    title: RiskCalculatorResponse
+  AssessmentEligibilityResponse:
+    type: object
+    properties:
+      CandidateProficiencyResults:
+        $ref: '#/definitions/CandidateProficiencyResults'
+    title: AssessmentEligibilityResponse
+  CandidateProficiencyResults:
+    type: object
+    properties:
+      CandidateProficiencyResult:
+        type: array
+        items:
+          $ref: '#/definitions/CandidateProficiencyResult'
+    title: CandidateProficiencyResults
+  CandidateProficiencyResult:
+    type: object
+    properties:
+      CompetencyUnitID:
+        type: integer
+        format: int32
+      AssessmentPathways:
+        $ref: '#/definitions/AssessmentPathways'
+      competencyElementSapID:
+        type: integer
+        format: int32
+      segment:
+        type: string
+      proficiencyLevelID:
+        type: integer
+        format: int32
+      competencyUnitSapID:
+        type: integer
+        format: int32
+      candidateGIN:
+        type: integer
+        format: int32
+      CompetencyElementID:
+        type: integer
+        format: int32
+    title: CandidateProficiencyResult
+  AssessmentPathways:
+    type: object
+    properties:
+      AssessmentPathway:
+        type: array
+        items:
+          $ref: '#/definitions/AssessmentPathway'
+    title: AssessmentPathways
+  AssessmentPathway:
+    type: object
+    properties:
+      startingProficiencyLevel:
+        type: string
+      attemptedProficiencyLevel:
+        type: string
+      attemptedOn:
+        type: number
+        format: double
+      assessmentEligible:
+        type: string
+      exceptions:
+        type: array
+        items:
+          $ref: '#/definitions/Exception'
+      target:
+        type: string
+    title: AssessmentPathway
+  Exception:
+    type: object
+    properties:
+      reason:
+        type: string
+      reasonCode:
+        type: integer
+        format: int32
+    title: Exception
+  JCR:
+    type: object
+    properties:
+      subJobSection:
+        $ref: '#/definitions/SubJobSection'
+      segment:
+        type: string
+      jobSection:
+        $ref: '#/definitions/JobSection'
+    title: JCR
+  SubJobSection:
+    type: object
+    properties:
+      subJobs:
+        type: object
+        properties: {}
+    title: SubJobSection
+  JobSection:
+    type: object
+    properties:
+      externalJobID:
+        type: string
+      ID:
+        type: number
+        format: double
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/JobItems'
+    title: JobSection
+  JobItems:
+    type: object
+    properties:
+      competencyElement:
+        type: string
+      role:
+        type: string
+      roleID:
+        type: integer
+        format: int32
+      competencyUnitName:
+        type: string
+      proficiencyLevel:
+        type: string
+      competencyElementID:
+        type: integer
+        format: int32
+      competencyUnitID:
+        type: integer
+        format: int32
+      roleType:
+        type: string
+    title: JobItems
+  JobAssignmentValidationRequest:
+    type: object
+    properties:
+      jobId:
+        type: string
+      roleCandidatesList:
+        type: array
+        items:
+          $ref: '#/definitions/RoleCandidatesList'
+    title: CompetencyRESTRestValidateAssignmentReportRequest
+  RoleCandidatesList:
+    type: object
+    properties:
+      Role:
+        type: string
+      Candidates:
+        $ref: '#/definitions/Candidates'
+    title: RoleCandidatesList
+  Candidates:
+    type: object
+    properties:
+      Candidate:
+        type: array
+        items:
+          type: string
+    title: Candidates
+  JobAssignmentValidationResponse:
+    type: object
+    properties:
+      individualRoles:
+        type: array
+        items:
+          type: string
+      jobID:
+        type: number
+        format: double
+      collectiveRoles:
+        type: array
+        items:
+          $ref: '#/definitions/CollectiveRole'
+      compliance:
+        type: boolean
+      subJobs:
+        type: array
+        items:
+          type: string
+    title: JobAssignmentValidationResponse
+  CollectiveRole:
+    type: object
+    properties:
+      Role:
+        type: string
+      Compliance:
+        type: boolean
+      Competencies:
+        $ref: '#/definitions/Competencies'
+      roleID:
+        type: integer
+        format: int32
+      People:
+        type: object
+        properties: {}
+      Reason:
+        type: string
+    title: CollectiveRole
+  Competencies:
+    type: object
+    properties:
+      Competency:
+        type: array
+        items:
+          $ref: '#/definitions/Competency'
+    title: Competencies
+  Competency:
+    type: object
+    properties:
+      competencyElementName:
+        type: string
+      proficiencyLevel:
+        type: string
+      competencyElementID:
+        type: integer
+        format: int32
+      competencyUnitID:
+        type: integer
+        format: int32
+      CompetencyElementSapID:
+        type: integer
+        format: int32
+      ComplianceLevel:
+        type: string
+    title: Competency
+  CandidateRankingReportRequest:
+    type: object
+    properties:
+      jobId:
+        type: string
+      candidates:
+        type: array
+        items:
+          $ref: '#/definitions/RoleCandidates'
+      multiShift:
+        type: string
+    title: CandidateRankingReportRequest
+  RoleCandidates:
+    type: object
+    properties:
+      role:
+        type: string
+      candidateGINs:
+        type: array
+        items:
+          type: string
+    title: RoleCandidates
+  CandidateRankingReportResponse:
+    type: object
+    properties:
+      jobId:
+        type: number
+        format: double
+      multiShift:
+        type: boolean
+      externalJobId:
+        type: string
+      jobRequirements:
+        type: array
+        items:
+          $ref: '#/definitions/JobRequirement'
+    title: CandidateRankingReportResponse
+  JobRequirement:
+    type: object
+    properties:
+      role:
+        type: string
+      requiredElements:
+        type: array
+        items:
+          $ref: '#/definitions/RequiredElement'
+      roleID:
+        type: integer
+        format: int32
+      externalJobID:
+        type: string
+      subJobID:
+        type: integer
+        format: int32
+      competencies:
+        type: array
+        items:
+          type: string
+    title: JobRequirement
+  RequiredElement:
+    type: object
+    properties:
+      competencyElement:
+        type: string
+      competencyUnitName:
+        type: string
+      proficiencyLevel:
+        type: string
+      competencyElementID:
+        type: integer
+        format: int32
+      competencyUnitID:
+        type: integer
+        format: int32
+    title: RequiredElement
+  CompetencyJobPayload:
+    type: object
+    properties:
+      AssetCodes:
+        $ref: '#/definitions/AssetCodes'
+      Services:
+        $ref: '#/definitions/Services'
+      Products:
+        $ref: '#/definitions/Products'
+      CompletionCodes:
+        $ref: '#/definitions/CompletionCodes'
+      SegmentId:
+        type: string
+      JobAttributes:
+        $ref: '#/definitions/JobAttributes'
+      PenetratorCodes:
+        $ref: '#/definitions/PenetratorCodes'
+      ExternalJobId:
+        type: string
+      SpsServiceLines:
+        $ref: '#/definitions/SpsServiceLines'
+      SourceSystemId:
+        type: string
+      ExtendedJobTypes:
+        $ref: '#/definitions/ExtendedJobTypes'
+      ServiceTypes:
+        $ref: '#/definitions/ServiceTypes'
+    title: CompetencyJobPayload
+  AssetCodes:
+    type: object
+    properties:
+      AssetCode:
+        type: array
+        items:
+          $ref: '#/definitions/AssetCode'
+    title: AssetCodes
+  AssetCode:
+    type: object
+    properties:
+      AssetCodeName:
+        type: string
+    title: AssetCode
+  Services:
+    type: object
+    properties:
+      Service:
+        type: array
+        items:
+          type: integer
+          format: int32
+    title: Services
+  Products:
+    type: object
+    properties:
+      Product:
+        type: array
+        items:
+          $ref: '#/definitions/Product'
+    title: Products
+  Product:
+    type: object
+    properties:
+      ProductName:
+        type: string
+      ProductId:
+        type: string
+    title: Product
+  CompletionCodes:
+    type: object
+    properties:
+      CompletionCode:
+        type: array
+        items:
+          type: integer
+          format: int32
+    title: CompletionCodes
+  JobAttributes:
+    type: object
+    properties:
+      JobAttribute:
+        type: array
+        items:
+          $ref: '#/definitions/JobAttribute'
+    title: JobAttributes
+  JobAttribute:
+    type: object
+    properties:
+      AttributeValue:
+        type: string
+      AttributeId:
+        type: string
+    title: JobAttribute
+  PenetratorCodes:
+    type: object
+    properties:
+      PenetratorCode:
+        type: array
+        items:
+          type: integer
+          format: int32
+    title: PenetratorCodes
+  SpsServiceLines:
+    type: object
+    properties:
+      SpsServiceLine:
+        type: array
+        items:
+          $ref: '#/definitions/SpsServiceLine'
+    title: SpsServiceLines
+  SpsServiceLine:
+    type: object
+    properties:
+      TypeId:
+        type: integer
+        format: int32
+      SubTypeId:
+        type: integer
+        format: int32
+      GroupId:
+        type: integer
+        format: int32
+    title: SpsServiceLine
+  ExtendedJobTypes:
+    type: object
+    properties:
+      ExtendedJobType:
+        type: array
+        items:
+          type: string
+    title: ExtendedJobTypes
+  ServiceTypes:
+    type: object
+    properties:
+      ServiceType:
+        type: array
+        items:
+          type: string
+    title: ServiceTypes
+  Exceptions:
+    properties:
+      reason:
+        type: string
+      reasonCode:
+        type: integer
+        format: int32
+      ruleName:
+        type: string
+      rulePackage:
+        type: string
+  AttemptedPathways:
+    properties:
+      attemptedOn:
+        type: string
+      attemptedProficiencyLevel:
+        type: string
+      exceptions:
+        type: array
+        items:
+          $ref: '#/definitions/Exceptions'
+      startingProficiencyLevel:
+        type: string
+      success:
+        type: boolean
+      target:
+        type: string
+  PCPItems:
+    properties:
+      attemptedPathways:
+        type: array
+        items:
+          $ref: '#/definitions/AttemptedPathways'
+      awardedOn:
+        type: string
+      competencyElement:
+        type: string
+      competencyElementID:
+        type: integer
+        format: int32
+      competencyElementSapID:
+        type: integer
+        format: int32
+      competencyUnitID:
+        type: integer
+        format: int32
+      competencyUnitName:
+        type: string
+      competencyUnitSapID:
+        type: integer
+        format: int32
+      gin:
+        type: integer
+        format: int32
+      proficiencyLevel:
+        type: string
+  PcpResponse:
+    properties:
+      gin:
+        type: integer
+        format: int32
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/PCPItems'
+  AssessmentEligibilityRequest:
+    type: array
+    items:
+      $ref: '#/definitions/AssessmentEligibilityList'
+  AssessmentEligibilityList:
+    properties:
+      CandidateGINs:
+        $ref: '#/definitions/CandidateGINs'
+      competencyElementID:
+        type: string
+      proficiencyLevelID:
+        type: string
+  CandidateGINs:
+    properties:
+      CandidateGIN:
+        type: array
+        items:
+          type: string
+  CandidateProficiencyReportResponse:
+    type: array
+    items:
+      $ref: '#/definitions/CandidateProficiencyReportResponse_inner'
+  CandidateProficiencyReportResponse_inner_Proficiencies_Criterias_Criteria:
+    type: object
+    properties:
+      accomplishedRecords:
+        type: integer
+        format: int32
+      criteria:
+        type: string
+      expirationDate:
+        type: string
+      requiredRecords:
+        type: integer
+        format: int32
+      subType:
+        type: string
+      type:
+        type: string
+  CandidateProficiencyReportResponse_inner_Proficiencies_Criterias:
+    type: object
+    properties:
+      Criteria:
+        type: array
+        items:
+          $ref: '#/definitions/CandidateProficiencyReportResponse_inner_Proficiencies_Criterias_Criteria'
+  CandidateProficiencyReportResponse_inner_Proficiencies_Proficiency:
+    type: object
+    properties:
+      competencyElementSapID:
+        type: integer
+        format: int32
+      competencyUnitSapID:
+        type: integer
+        format: int32
+      proficiencyLevelID:
+        type: integer
+        format: int32
+      CompetencyElementID:
+        type: integer
+        format: int32
+      CompetencyUnitID:
+        type: integer
+        format: int32
+      Criterias:
+        $ref: '#/definitions/CandidateProficiencyReportResponse_inner_Proficiencies_Criterias'
+  CandidateProficiencyReportResponse_inner_Proficiencies:
+    type: object
+    properties:
+      Proficiency:
+        type: array
+        items:
+          $ref: '#/definitions/CandidateProficiencyReportResponse_inner_Proficiencies_Proficiency'
+  CandidateProficiencyReportResponse_inner:
+    type: object
+    properties:
+      gin:
+        type: integer
+        format: int32
+      segment:
+        type: string
+      Proficiencies:
+        $ref: '#/definitions/CandidateProficiencyReportResponse_inner_Proficiencies'
+externalDocs:
+  description: Find out more on the SLB WIKI
+  url: https://wiki.slb.com/display/ea/Developer%27s+Guide+to+Self-Service

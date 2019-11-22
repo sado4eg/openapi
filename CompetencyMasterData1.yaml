@@ -1,0 +1,332 @@
+---
+swagger: "2.0"
+info:
+  description: This API provides Competency Master Data
+  version: "1.0"
+  title: Competency Master Data API
+  contact:
+    name: Jeff Woodel
+    email: JWoodel@slb.com
+  license:
+    name: Schlumberger proprietary
+host: apigateway.evq.it.slb.com
+basePath: /risk-to-integrity/competency-competencydata
+tags: []
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+security:
+- APIKeyHeader: []
+paths:
+  /source-systems:
+    get:
+      summary: Competency Source System
+      description: Returns Internal Competency reference data for source systems
+      operationId: source-systems
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: Auto generated using Swagger Inspector
+          headers: {}
+          schema:
+            $ref: '#/definitions/SourceSystemResponse'
+      deprecated: false
+  /product-lines:
+    get:
+      summary: Competency Internal Product Line Reference Data
+      description: Competency Internal Product Line Reference Data
+      operationId: product-lines
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: Competency Internal Product Line Reference Data
+          headers: {}
+          schema:
+            $ref: '#/definitions/ProductLineResponse'
+      deprecated: false
+  /job-attributes:
+    get:
+      summary: Competency Job Attributes for a Product Line
+      description: Competency Job Attributes for a Product Line
+      operationId: job-attributes
+      produces:
+      - application/json
+      parameters:
+      - name: sourceSystemId
+        in: query
+        required: true
+        type: integer
+      - name: productLineId
+        in: query
+        required: true
+        type: integer
+      - name: isCompetencySegmentId
+        in: query
+        description: ""
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: Competency Job Attributes for a Product Line
+          headers: {}
+          schema:
+            $ref: '#/definitions/MasterDataReport'
+      deprecated: false
+  /roles:
+    get:
+      summary: Competency Roles and Role Types for a Product Line
+      description: Competency Roles and Role Types
+      operationId: roles
+      produces:
+      - application/json
+      parameters:
+      - name: sourceSystemId
+        in: query
+        required: true
+        type: integer
+      - name: productLineId
+        in: query
+        required: true
+        type: integer
+      - name: isCompetencySegmentId
+        in: query
+        description: ""
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: Auto generated using Swagger Inspector
+          headers: {}
+          schema:
+            $ref: '#/definitions/RoleResponse'
+      deprecated: false
+  /competency-catalog-items:
+    get:
+      summary: Competency Catalog for a Product Line
+      description: Competency Catalog for a Product Line
+      operationId: competency-catalog-items
+      produces:
+      - application/json
+      parameters:
+      - name: sourceSystemId
+        in: query
+        required: true
+        type: integer
+      - name: productLineId
+        in: query
+        required: true
+        type: integer
+      - name: isCompetencySegmentId
+        in: query
+        description: ""
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: Competency Catalog for a Product Line
+          headers: {}
+          schema:
+            $ref: '#/definitions/CompetencyCatalogResponse'
+      deprecated: false
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    name: x-apikey
+    in: header
+definitions:
+  SourceSystemResponse:
+    type: object
+    properties:
+      Type:
+        type: string
+      Items:
+        $ref: '#/definitions/Items'
+    title: SourceSystemResponse
+  Items:
+    type: object
+    properties:
+      Item:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+    title: Items
+  Item:
+    type: object
+    properties:
+      DisplayName:
+        type: string
+      ID:
+        type: integer
+        format: int32
+      Name:
+        type: string
+    title: Item
+  RoleResponse:
+    type: object
+    properties:
+      Roles:
+        $ref: '#/definitions/Roles'
+      ProductLine:
+        $ref: '#/definitions/ProductLine'
+    title: RoleResponse
+  Roles:
+    type: object
+    properties:
+      Role:
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+    title: Roles
+  Role:
+    type: object
+    properties:
+      RoleName:
+        type: string
+      RoleType:
+        $ref: '#/definitions/RoleType'
+      RoleId:
+        type: integer
+        format: int32
+    title: Role
+  RoleType:
+    type: object
+    properties:
+      RoleTypeId:
+        type: integer
+        format: int32
+      RoleTypeName:
+        type: string
+    title: RoleType
+  ProductLine:
+    type: object
+    properties:
+      ProductLineName:
+        type: string
+      ProductLineId:
+        type: integer
+        format: int32
+    title: ProductLine
+  ProductLineResponse:
+    type: object
+    properties:
+      Type:
+        type: string
+      Items:
+        $ref: '#/definitions/Items'
+    title: ProductLineResponse
+  MasterDataReport:
+    type: object
+    properties:
+      MasterData:
+        type: array
+        items:
+          $ref: '#/definitions/MasterDataReport_MasterData'
+      JobAttributes:
+        $ref: '#/definitions/MasterDataReport_JobAttributes'
+      SubJobAttributes:
+        $ref: '#/definitions/MasterDataReport_SubJobAttributes'
+  CompetencyCatalogResponse:
+    type: object
+    properties:
+      CompetencyUnits:
+        $ref: '#/definitions/CompetencyCatalogResponse_CompetencyUnits'
+      Dimensions:
+        $ref: '#/definitions/CompetencyCatalogResponse_Dimensions'
+      CompetencyCatalog:
+        $ref: '#/definitions/CompetencyCatalogResponse_CompetencyCatalog'
+  MasterDataReport_Items_Item:
+    properties:
+      ID:
+        type: number
+      Name:
+        type: string
+      DisplayName:
+        type: string
+  MasterDataReport_Items:
+    properties:
+      Item:
+        type: array
+        items:
+          $ref: '#/definitions/MasterDataReport_Items_Item'
+  MasterDataReport_MasterData:
+    properties:
+      Type:
+        type: string
+      Items:
+        $ref: '#/definitions/MasterDataReport_Items'
+  MasterDataReport_JobAttributes_JobAttribute:
+    properties:
+      Id:
+        type: number
+      Name:
+        type: string
+      DisplayName:
+        type: string
+      Type:
+        type: string
+  MasterDataReport_JobAttributes:
+    properties:
+      JobAttribute:
+        type: array
+        items:
+          $ref: '#/definitions/MasterDataReport_JobAttributes_JobAttribute'
+  MasterDataReport_SubJobAttributes:
+    properties:
+      SubJobAttribute:
+        type: array
+        items:
+          $ref: '#/definitions/MasterDataReport_JobAttributes_JobAttribute'
+  CompetencyCatalogResponse_CompetencyUnits_CompetencyUnit:
+    properties:
+      ID:
+        type: number
+      Name:
+        type: string
+      DisplayName:
+        type: string
+      SapID:
+        type: number
+  CompetencyCatalogResponse_CompetencyUnits:
+    properties:
+      CompetencyUnit:
+        type: array
+        items:
+          $ref: '#/definitions/CompetencyCatalogResponse_CompetencyUnits_CompetencyUnit'
+  CompetencyCatalogResponse_Dimensions:
+    properties:
+      Dimension:
+        type: array
+        items:
+          $ref: '#/definitions/MasterDataReport_Items_Item'
+  CompetencyCatalogResponse_CompetencyCatalog_CompetencyCatalogItem:
+    properties:
+      CompetencyElementId:
+        type: number
+      CompetencyElementSapId:
+        type: number
+      CompetencyElementName:
+        type: string
+      CompetencyElementDisplayName:
+        type: string
+      CompetencyUnitId:
+        type: number
+      CompetencyUnitSapId:
+        type: number
+      DimensionId:
+        type: number
+  CompetencyCatalogResponse_CompetencyCatalog:
+    properties:
+      CompetencyCatalogItem:
+        type: array
+        items:
+          $ref: '#/definitions/CompetencyCatalogResponse_CompetencyCatalog_CompetencyCatalogItem'
+externalDocs:
+  description: Find out more on the SLB WIKI
+  url: https://wiki.slb.com/display/ea/Developer%27s+Guide+to+Self-Service
